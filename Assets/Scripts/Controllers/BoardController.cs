@@ -69,6 +69,11 @@ public class BoardController : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        ManualTick();
+    }
+
 
     public void ManualTick()
     {
