@@ -35,6 +35,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public eLevelMode m_currentLevelMode;
+
 
     private GameSettings m_gameSettings;
 
@@ -85,7 +87,7 @@ public class GameManager : MonoBehaviour
     {
         m_boardController = new GameObject("BoardController").AddComponent<BoardController>();
         m_boardController.StartGame(this, m_gameSettings);
-
+        m_currentLevelMode = mode;
         if (mode == eLevelMode.MOVES)
         {
             m_levelCondition = this.gameObject.AddComponent<LevelMoves>();
@@ -100,6 +102,21 @@ public class GameManager : MonoBehaviour
         m_levelCondition.ConditionCompleteEvent += GameOver;
 
         State = eStateGame.GAME_STARTED;
+    }
+
+    public void ReplayLastLevel()
+    {
+        foreach (var levelMove in FindObjectsOfType<LevelMoves>())
+        {
+            Destroy(levelMove);
+        }
+
+        foreach (var levelTime in FindObjectsOfType<LevelTime>())
+        {
+            Destroy(levelTime);
+        }
+
+        LoadLevel(m_currentLevelMode);
     }
 
     public void GameOver()

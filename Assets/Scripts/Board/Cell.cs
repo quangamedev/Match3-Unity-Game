@@ -83,7 +83,9 @@ public class Cell : MonoBehaviour
 
     internal void StopHintAnimation()
     {
-        Item.StopAnimateForHint();
+        // fix null ref where item is freed when trying to stop hint animation
+        if (Item != null)
+            Item.StopAnimateForHint();
     }
 
     internal void ApplyItemMoveToPosition()
