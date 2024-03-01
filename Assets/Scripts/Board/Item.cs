@@ -24,7 +24,7 @@ public class Item
         {
             if (s_itemPrefab)
             {
-                var spriteRenderer = GameObject.Instantiate(s_itemPrefab);
+                var spriteRenderer = s_itemPrefab.SpawnFromPool();
                 spriteRenderer.sprite = sprite;
                 View = spriteRenderer.transform;
             }
