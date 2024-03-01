@@ -13,6 +13,8 @@ public class Item
 
     protected ItemsSkin ItemSkin { get; private set; }
 
+    private static SpriteRenderer s_itemPrefab = Resources.Load<SpriteRenderer>("prefabs/Item");
+
 
     public virtual void SetView()
     {
@@ -20,10 +22,9 @@ public class Item
 
         if (sprite)
         {
-            SpriteRenderer prefab = Resources.Load<SpriteRenderer>("prefabs/Item");
-            if (prefab)
+            if (s_itemPrefab)
             {
-                var spriteRenderer = GameObject.Instantiate(prefab);
+                var spriteRenderer = GameObject.Instantiate(s_itemPrefab);
                 spriteRenderer.sprite = sprite;
                 View = spriteRenderer.transform;
             }
