@@ -55,9 +55,9 @@ SpriteAtlas:
   - {fileID: 21300000, guid: d7048b7b19e3543408d95e06436ae3d7, type: 3}
   - {fileID: 21300000, guid: 0fc54d3d2bd9f194c8915759e279a8c4, type: 3}
   m_PackedSpriteNamesToIndex:
-  - arrow_vert
-  - arrow_horiz
-  - bombColor
+  - bonus_2
+  - bonus_1
+  - bonus_3
   - 12
   m_RenderDataMap: {}
   m_Tag: BonusItems

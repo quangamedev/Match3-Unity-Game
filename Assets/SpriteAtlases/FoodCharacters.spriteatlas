@@ -58,13 +58,13 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 7164e9eb7829dfb4595431d2eb01fc76, type: 3}
   - {fileID: 21300000, guid: fa170d4df6f61ca4d87906fecd033754, type: 3}
   m_PackedSpriteNamesToIndex:
-  - characters_0005
-  - characters_0004
-  - characters_0003
-  - characters_0006
-  - characters_0001
-  - characters_0007
-  - characters_0002
+  - characters_5
+  - characters_4
+  - characters_3
+  - characters_6
+  - characters_1
+  - characters_7
+  - characters_2
   m_RenderDataMap: {}
   m_Tag: FoodCharacters
   m_IsVariant: 0

@@ -11,22 +11,31 @@ public class Item
 
     public Transform View { get; private set; }
 
+    protected ItemsSkin ItemSkin { get; private set; }
+
 
     public virtual void SetView()
     {
-        string prefabname = GetPrefabName();
+        Sprite sprite = GetItemSprite();
 
-        if (!string.IsNullOrEmpty(prefabname))
+        if (sprite)
         {
-            GameObject prefab = Resources.Load<GameObject>(prefabname);
+            SpriteRenderer prefab = Resources.Load<SpriteRenderer>("prefabs/Item");
             if (prefab)
             {
-                View = GameObject.Instantiate(prefab).transform;
+                var spriteRenderer = GameObject.Instantiate(prefab);
+                spriteRenderer.sprite = sprite;
+                View = spriteRenderer.transform;
             }
         }
     }
 
-    protected virtual string GetPrefabName() { return string.Empty; }
+    public void SetSkin(ItemsSkin skin)
+    {
+        ItemSkin = skin;
+    }
+
+    protected virtual Sprite GetItemSprite() { return null; }
 
     public virtual void SetCell(Cell cell)
     {

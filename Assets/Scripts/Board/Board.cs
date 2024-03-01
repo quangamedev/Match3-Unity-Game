@@ -25,6 +25,9 @@ public class Board
 
     private int m_matchMin;
 
+    private ItemsSkin m_normalItemSkin;
+    private ItemsSkin m_bonusItemSkin;
+
     public Board(Transform transform, GameSettings gameSettings)
     {
         m_root = transform;
@@ -33,6 +36,9 @@ public class Board
 
         this.boardSizeX = gameSettings.BoardSizeX;
         this.boardSizeY = gameSettings.BoardSizeY;
+
+        m_normalItemSkin = gameSettings.NormalItemSkin;
+        m_bonusItemSkin = gameSettings.BonusItemSkin;
 
         m_cells = new Cell[boardSizeX, boardSizeY];
 
@@ -80,6 +86,7 @@ public class Board
             {
                 Cell cell = m_cells[x, y];
                 NormalItem item = new NormalItem();
+                item.SetSkin(m_normalItemSkin);
 
                 List<NormalItem.eNormalType> types = new List<NormalItem.eNormalType>();
                 if (cell.NeighbourBottom != null)
@@ -146,6 +153,7 @@ public class Board
                 if (!cell.IsEmpty) continue;
 
                 NormalItem item = new NormalItem();
+                item.SetSkin(m_normalItemSkin);
 
                 item.SetType(Utils.GetRandomNormalType());
                 item.SetView();
@@ -261,6 +269,7 @@ public class Board
         eMatchDirection dir = GetMatchDirection(matches);
 
         BonusItem item = new BonusItem();
+        item.SetSkin(m_bonusItemSkin);
         switch (dir)
         {
             case eMatchDirection.ALL:
