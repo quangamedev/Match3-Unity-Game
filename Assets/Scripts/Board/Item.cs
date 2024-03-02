@@ -111,7 +111,8 @@ public class Item
             View.DOScale(0.1f, 0.1f).OnComplete(
                 () =>
                 {
-                    GameObject.Destroy(View.gameObject);
+                    View.GetComponent<SpriteRenderer>().ReturnToPool();
+                    View.DOScale(1, 0);
                     View = null;
                 }
                 );
@@ -142,7 +143,7 @@ public class Item
 
         if (View)
         {
-            GameObject.Destroy(View.gameObject);
+            View.GetComponent<SpriteRenderer>().ReturnToPool();
             View = null;
         }
     }
