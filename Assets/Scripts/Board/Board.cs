@@ -155,7 +155,7 @@ public class Board
                 NormalItem item = new NormalItem();
                 item.SetSkin(m_normalItemSkin);
 
-                item.SetType(Utils.GetRandomNormalType());
+                item.SetType(GetDesiredType(cell));
                 item.SetView();
                 item.SetViewRoot(m_root);
 
@@ -163,6 +163,87 @@ public class Board
                 cell.ApplyItemPosition(true);
             }
         }
+    }
+
+    private List<NormalItem.eNormalType> _applicableItemTypes = new List<NormalItem.eNormalType>();
+    private NormalItem.eNormalType GetDesiredType(Cell cell)
+    {
+        _applicableItemTypes.Clear();
+        NormalItem.eNormalType[] leastToMostCommonNormalItemTypes = new NormalItem.eNormalType[Enum.GetValues(typeof(NormalItem.eNormalType)).Length];
+        GetLeastToMostCommonNormalItemTypesNonAlloc(leastToMostCommonNormalItemTypes);
+
+        HashSet<NormalItem.eNormalType> neighboringTypes = new HashSet<NormalItem.eNormalType>();
+        GetNeighboringTypesNonAlloc(cell, neighboringTypes);
+
+        _applicableItemTypes = leastToMostCommonNormalItemTypes.Except(neighboringTypes).ToList();
+
+        if (_applicableItemTypes.Count == 0)
+        {
+            return Utils.GetRandomNormalType();
+        }
+
+        return _applicableItemTypes[0];
+    }
+
+    private Dictionary<NormalItem.eNormalType, int> _countByTypes = new Dictionary<NormalItem.eNormalType, int>();
+    private List<NormalItem.eNormalType> _leastToMostCommonItemTypes = Enum.GetValues(typeof(NormalItem.eNormalType)).Cast<NormalItem.eNormalType>().ToList();
+    private void GetLeastToMostCommonNormalItemTypesNonAlloc(NormalItem.eNormalType[] results)
+    {
+        if (results.Length != _leastToMostCommonItemTypes.Count)
+        {
+            throw new InvalidOperationException();
+        }
+
+        _countByTypes.Clear();
+
+        foreach (var cell in m_cells)
+        {
+            if (cell.Item is not NormalItem cellItem)
+            {
+                continue;
+            }
+
+            if (!_countByTypes.TryAdd(cellItem.ItemType, 1))
+            {
+                _countByTypes[cellItem.ItemType] += 1;
+            }
+        }
+
+        _leastToMostCommonItemTypes.Sort(SortByCount);
+        for (int i = 0; i < results.Length; i++)
+        {
+            results[i] = _leastToMostCommonItemTypes[i];
+        }
+    }
+
+    private int SortByCount(NormalItem.eNormalType type1, NormalItem.eNormalType type2)
+    {
+        if (!_countByTypes.ContainsKey(type1) && !_countByTypes.ContainsKey(type2))
+            return 0;
+        if (!_countByTypes.ContainsKey(type1))
+            return -1;
+        if (!_countByTypes.ContainsKey(type2))
+            return 1;
+
+        return _countByTypes[type1].CompareTo(_countByTypes[type2]);
+    }
+
+    private int GetNeighboringTypesNonAlloc(Cell cell, HashSet<NormalItem.eNormalType> results)
+    {
+        results.Clear();
+
+        // should not cast this way, this breaks dependency inversion principle
+        // but can't think of any better solution atm
+        if (cell.NeighbourUp && cell.NeighbourUp.Item is NormalItem itemUp)
+            results.Add(itemUp.ItemType);
+        if (cell.NeighbourBottom && cell.NeighbourBottom.Item is NormalItem itemBottom)
+            results.Add(itemBottom.ItemType);
+        if (cell.NeighbourLeft && cell.NeighbourLeft.Item is NormalItem itemLeft)
+            results.Add(itemLeft.ItemType);
+        if (cell.NeighbourRight && cell.NeighbourRight.Item is NormalItem itemRight)
+            results.Add(itemRight.ItemType);
+
+        return results.Count;
     }
 
     internal void ExplodeAllItems()
